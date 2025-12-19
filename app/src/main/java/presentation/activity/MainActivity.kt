@@ -33,10 +33,6 @@ class MainActivity : ComponentActivity(), OnRobotReadyListener, OnGoToLocationSt
         val robotController = TemiRobotController(robot)
         viewModel = TemiViewModel(robotController)
 
-        setContent {
-            //Esta es la interfaz de Temi
-            TemiScreen(viewModel = viewModel)
-        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -115,6 +111,11 @@ class MainActivity : ComponentActivity(), OnRobotReadyListener, OnGoToLocationSt
             )
 
             //robot.speak(ttsRequest)
+
+            setContent {
+                //Esta es la interfaz de Temi
+                TemiScreen(viewModel = viewModel)
+            }
         }
     }
 
