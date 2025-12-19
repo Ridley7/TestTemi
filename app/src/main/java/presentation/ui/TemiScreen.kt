@@ -93,7 +93,7 @@ fun TemiScreen(
 
                 Spacer(modifier = Modifier.height(48.dp))
 
-                // BOTÓN Base de cargca
+                // BOTÓN Base de carga
                 Button(
                     onClick = {
                         viewModel.onNavigateToDoor()
@@ -109,6 +109,25 @@ fun TemiScreen(
                         fontWeight = FontWeight.Medium
                     )
                 }
+
+                Spacer(modifier = Modifier.height(48.dp))
+
+                Button(
+                    onClick = {
+                        viewModel.onNavigateToVoiceCommands()
+                    },
+                    modifier = Modifier
+                        .height(72.dp)
+                        .width(320.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text(
+                        text = "Comandos simples de voz (NO)",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
             }
         }
     }

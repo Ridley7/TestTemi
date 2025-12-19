@@ -1,15 +1,21 @@
 package presentation.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import presentation.ui.TemiScreen
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import config.TemiConstants
+import domain.ui.TemiUiEvent
 import infraestructure.robot.TemiRobotController
+import kotlinx.coroutines.launch
 import presentation.viewmodel.TemiViewModel
 
 class MainActivity : ComponentActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener
@@ -31,6 +37,28 @@ class MainActivity : ComponentActivity(), OnRobotReadyListener, OnGoToLocationSt
             //Esta es la interfaz de Temi
             TemiScreen(viewModel = viewModel)
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiEvent.collect { event ->
+                    when (event) {
+
+                        TemiUiEvent.NavigateToVoiceCommands -> {
+                            startActivity(
+                                Intent(
+                                    this@MainActivity,
+                                    VoiceCommandsActivity::class.java
+                                )
+                            )
+                        }
+
+                        // otros eventos que ya tengas
+                    }
+                }
+            }
+        }
+
+
     }
 
     override fun onStart(){
@@ -82,10 +110,11 @@ class MainActivity : ComponentActivity(), OnRobotReadyListener, OnGoToLocationSt
             //Hacemos que el robot hable cuando este listo
             val ttsRequest = TtsRequest.create(
                 speech = "Listo",
+                isShowOnConversationLayer = false,
                 language = TtsRequest.Language.ES_ES
             )
 
-            robot.speak(ttsRequest)
+            //robot.speak(ttsRequest)
         }
     }
 
